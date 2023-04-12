@@ -60,6 +60,8 @@ spec:
             description: ServiceGroupSpec defines the desired state of ServiceGroup
             properties:
               loadBalanceInfos:
+                description: LoadBalanceInfos is field of ServiceGroup. This field
+                  records information about load balancing.
                 items:
                   properties:
                     description:
@@ -77,6 +79,8 @@ spec:
                   type: object
                 type: array
               odin:
+                description: Odin is field of ServiceGroup. The field mainly records
+                  registration information related to odin.
                 properties:
                   baseNode:
                     type: string
@@ -97,8 +101,8 @@ spec:
                     type: string
                 type: object
               service:
-                description: Foo is an example field of ServiceGroup. Edit servicegroup_types.go
-                  to remove/update
+                description: Service is field of ServiceGroup. The field contains
+                  multiple service information and corresponding instance weights.
                 properties:
                   port:
                     type: integer
@@ -127,9 +131,9 @@ spec:
               reason:
                 type: string
               syncResult:
-                description: 'INSERT ADDITIONAL STATUS FIELD - define observed state
-                  of cluster Important: Run "make" to regenerate code after modifying
-                  this file'
+                description: SyncResult is field of ServiceGroupStatus. This field
+                  records the instance status synchronization result, service information,
+                  and load balancing information.
                 properties:
                   loadBalanceResult:
                     properties:
@@ -139,10 +143,6 @@ spec:
                         type: string
                       target:
                         type: string
-                    required:
-                    - instances
-                    - lbType
-                    - target
                     type: object
                   serviceResult:
                     properties:
