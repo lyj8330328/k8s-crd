@@ -1,0 +1,175 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.9.2
+  creationTimestamp: null
+  name: servicegroups.component.eks.didiglobal.com
+spec:
+  group: component.eks.didiglobal.com
+  names:
+    kind: ServiceGroup
+    listKind: ServiceGroupList
+    plural: servicegroups
+    singular: servicegroup
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - description: The service port
+      jsonPath: .spec.service.port
+      name: PORT
+      type: integer
+    - description: The odin usn
+      jsonPath: .spec.odin.service.usn
+      name: ODIN-USN
+      type: string
+    - description: Total number of service instances.
+      jsonPath: .status.syncResult.total
+      name: TOTAL
+      type: integer
+    - description: load balance type
+      jsonPath: .status.syncResult.loadBalanceResult.lbType
+      name: LB-TYPE
+      type: string
+    - description: load balance target
+      jsonPath: .status.syncResult.loadBalanceResult.target
+      name: LB-TARGET
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: AGE
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ServiceGroup is the Schema for the servicegroups API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ServiceGroupSpec defines the desired state of ServiceGroup
+            properties:
+              loadBalanceInfos:
+                items:
+                  properties:
+                    description:
+                      type: string
+                    instanceSyncType:
+                      type: string
+                    lbType:
+                      type: string
+                    protocol:
+                      type: string
+                    strategy:
+                      type: string
+                    target:
+                      type: string
+                  type: object
+                type: array
+              odin:
+                properties:
+                  baseNode:
+                    type: string
+                  cluster:
+                    items:
+                      type: string
+                    type: array
+                  description:
+                    type: string
+                  service:
+                    properties:
+                      name:
+                        type: string
+                      usn:
+                        type: string
+                    type: object
+                  serviceLevel:
+                    type: string
+                type: object
+              service:
+                description: Foo is an example field of ServiceGroup. Edit servicegroup_types.go
+                  to remove/update
+                properties:
+                  port:
+                    type: integer
+                  targetRef:
+                    items:
+                      properties:
+                        description:
+                          type: string
+                        kind:
+                          type: string
+                        name:
+                          type: string
+                        namespace:
+                          type: string
+                        weight:
+                          type: integer
+                      type: object
+                    type: array
+                type: object
+            type: object
+          status:
+            description: ServiceGroupStatus defines the observed state of ServiceGroup
+            properties:
+              phase:
+                type: string
+              reason:
+                type: string
+              syncResult:
+                description: 'INSERT ADDITIONAL STATUS FIELD - define observed state
+                  of cluster Important: Run "make" to regenerate code after modifying
+                  this file'
+                properties:
+                  loadBalanceResult:
+                    properties:
+                      instances:
+                        type: string
+                      lbType:
+                        type: string
+                      target:
+                        type: string
+                    required:
+                    - instances
+                    - lbType
+                    - target
+                    type: object
+                  serviceResult:
+                    properties:
+                      addresses:
+                        items:
+                          properties:
+                            ip:
+                              type: string
+                            networkType:
+                              type: string
+                          type: object
+                        type: array
+                      kind:
+                        type: string
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                      weight:
+                        type: integer
+                    type: object
+                  total:
+                    type: integer
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
